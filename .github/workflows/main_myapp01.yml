@@ -17,11 +17,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Zip static HTML files
+      - name: Zip static HTML files from APP folder
         run: |
           mkdir site
-          copy *.html site\
+          copy APP\* site\   # Copy files from APP folder to site folder
           powershell Compress-Archive -Path site\* -DestinationPath site.zip
+
+      - name: List files in current directory (debug step)
+        run: dir
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -35,4 +38,4 @@ jobs:
         with:
           app-name: 'MYAPP01'
           slot-name: 'Production'
-          package: site.zip
+          package: './site.zip'
