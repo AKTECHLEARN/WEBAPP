@@ -1,7 +1,4 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
-name: Build and deploy ASP.Net Core app to Azure Web App - MYAPP01
+name: Deploy static HTML to Azure Web App - MYAPP01
 
 on:
   push:
@@ -10,59 +7,29 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: windows-latest
-    permissions:
-      contents: read #This is required for actions/checkout
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up .NET Core
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '9.x'
-
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
-
-      - name: dotnet publish
-        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
-
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v4
-        with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
-
   deploy:
     runs-on: windows-latest
-    needs: build
-    environment:
-      name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
 
     steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v4
-        with:
-          name: .net-app
-      
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Zip static files
+        run: |
+          mkdir site
+          copy *.html site\
+          powershell Compress-Archive -Path site\* -DestinationPath site.zip
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_6F2A4DF7F7BD46248762C7CA9250224A }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_96F039D63F934F4EB3F0F9643B7578A9 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_17C2635B261B461DB1118FED20BC0CEC }}
+          client-id: eb1dfb73-6f48-4952-bc18-db0d50083a6c
+          tenant-id: bf7f6c35-a901-4467-b2ac-46fff520f3fa
+          subscription-id: 61c93cef-3378-4258-b3f6-98ce21be82e9
 
       - name: Deploy to Azure Web App
-        id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'MYAPP01'
           slot-name: 'Production'
-          package: .
-          
+          package: site.zip
