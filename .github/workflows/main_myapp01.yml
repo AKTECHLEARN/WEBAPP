@@ -17,19 +17,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Step 1: Create site folder and copy APP file into it
+      # Step 1: Create site folder and copy necessary files
       - name: Prepare site content
         run: |
           mkdir site
-          copy APP site\  # Since APP is a file
+          copy APP site\
+          copy index.html site\
 
       # Step 2: Create ZIP archive from the site folder
       - name: Create site.zip
         run: powershell Compress-Archive -Path site\* -DestinationPath site.zip
 
-      # Optional debug: Verify zip creation
-      - name: List files in current directory
-        run: dir
+      # Optional Debug: List contents of the ZIP
+      - name: Verify site.zip contents
+        run: |
+          powershell Expand-Archive -Path site.zip -DestinationPath test
+          dir test
 
       # Step 3: Login to Azure
       - name: Login to Azure
