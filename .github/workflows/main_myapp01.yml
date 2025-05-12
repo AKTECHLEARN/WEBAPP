@@ -9,12 +9,15 @@ on:
 jobs:
   deploy:
     runs-on: windows-latest
+    permissions:
+      id-token: write       # Required for Azure OIDC login
+      contents: read        # Required to checkout repo
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Zip static files
+      - name: Zip static HTML files
         run: |
           mkdir site
           copy *.html site\
