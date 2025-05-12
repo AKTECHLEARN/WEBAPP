@@ -1,4 +1,10 @@
-<div class="jumbotron">
-    <h1>.NET 💜 Azure HI</h1>
-    <p class="lead">Example .NET app to Azure App Service.</p>
-</div>
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>My First Heading</h1>
+
+<p>My first paragraph.</p>
+
+</body>
+</html>
