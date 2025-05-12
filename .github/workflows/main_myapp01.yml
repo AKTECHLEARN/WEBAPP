@@ -17,18 +17,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Step 1: If APP is an HTML file, zip it
-      - name: Zip APP file
+      # Step 1: Create site folder and copy APP file into it
+      - name: Prepare site content
         run: |
           mkdir site
-          copy APP site\  # Copy the APP file to the site folder
-          powershell Compress-Archive -Path site\* -DestinationPath site.zip  # Create the zip file
+          copy APP site\  # Since APP is a file
 
-      # Debugging step: List files in current directory (check if site.zip is created)
-      - name: List files in current directory (debug step)
+      # Step 2: Create ZIP archive from the site folder
+      - name: Create site.zip
+        run: powershell Compress-Archive -Path site\* -DestinationPath site.zip
+
+      # Optional debug: Verify zip creation
+      - name: List files in current directory
         run: dir
 
-      # Step 2: Login to Azure
+      # Step 3: Login to Azure
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -36,10 +39,10 @@ jobs:
           tenant-id: bf7f6c35-a901-4467-b2ac-46fff520f3fa
           subscription-id: 61c93cef-3378-4258-b3f6-98ce21be82e9
 
-      # Step 3: Deploy the zip file to Azure Web App
+      # Step 4: Deploy the zip file to Azure Web App
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'MYAPP01'
           slot-name: 'Production'
-          package: './site.zip'  # Path to the zip file created above
+          package: './site.zip'
