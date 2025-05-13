@@ -3,10 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My App</title>
+    <title>Funny Page</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #f0f8ff;
+            text-align: center;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            color: #ff6347;
+        }
+        .button {
+            background-color: #ff6347;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
+        }
+        .button:hover {
+            background-color: #ff4500;
+        }
+        .joke {
+            font-size: 1.2em;
+            margin-top: 20px;
+            color: #555;
+        }
+        .reaction {
+            font-size: 1.5em;
+            color: #ff6347;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to My App named Ungabunga</h1>
-    <p>This is a simple HTML page to serve as the homepage for your web app.</p>
+    <h1>Welcome to the Funny Page!</h1>
+    <button class="button" onclick="tellJoke()">Tell Me a Joke!</button>
+    
+    <div class="joke" id="jokeText">Click the button for a surprise!</div>
+
+    <div class="reaction" id="reactionText"></div>
+
+    <script>
+        const jokes = [
+            "Why don’t skeletons fight each other? They don’t have the guts.",
+            "Why did the scarecrow win an award? Because he was outstanding in his field!",
+            "I told my computer I needed a break, and now it won’t stop sending me Kit-Kats!",
+            "Why don’t eggs tell jokes? Because they might crack up!",
+            "I only know 25 letters of the alphabet... I don’t know y."
+        ];
+
+        const reactions = [
+            "Ha! That was a good one, right?",
+            "LOL, didn’t see that coming!",
+            "Wait, wait… I need a moment to recover.",
+            "Is it getting hot in here or is it just the joke?",
+            "That one was so cheesy, I’m melting!"
+        ];
+
+        function tellJoke() {
+            const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
+            const randomReaction = reactions[Math.floor(Math.random() * reactions.length)];
+
+            document.getElementById('jokeText').textContent = randomJoke;
+            document.getElementById('reactionText').textContent = randomReaction;
+        }
+    </script>
 </body>
 </html>
+
